@@ -1,0 +1,15 @@
+html
+    head
+        link(rel='stylesheet', href='/stylesheets/style.css', type='text/css')
+        script(src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js")
+        script(src="/js/libraries/p5.min.js")
+        script(src="/js/game.js")
+        script(src="/js/ship.js")
+        script(src="/js/laser.js")
+        script(src="/js/powerup.js")
+    body
+        div(id="canvascontainer")
+        label#clientName(style='display:none')
+            | #{id}
+
+        block content
