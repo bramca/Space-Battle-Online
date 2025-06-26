@@ -1,13 +1,17 @@
-function Laser(position, angle, initvel, lcolor) {
-    this.pos = position;
-    this.vel = p5.Vector.fromAngle(angle).mult(6).add(initvel);
-    this.lasercolor = lcolor;
-    this.weight = 4;
-    this.removed = false;
-    this.angle = angle;
-    this.initvel = initvel;
+class Laser {
+    constructor(position, angle, initvel, lcolor) {
+        this.pos = position;
+        this.vel = p5.Vector.fromAngle(angle).mult(6).add(initvel);
+        this.lasercolor = lcolor;
+        this.weight = 4;
+        this.removed = false;
+        this.angle = angle;
+        this.initvel = initvel;
+        this.isbomb = false;
+        this.isnuke = false;
+    }
 
-    this.render = function () {
+    render() {
         push();
         stroke(this.lasercolor);
         strokeWeight(this.weight);
@@ -15,11 +19,11 @@ function Laser(position, angle, initvel, lcolor) {
         pop();
     }
 
-    this.update = function () {
+    update() {
         this.pos.add(this.vel);
     }
 
-    this.checkEdges = function (field) {
+    checkEdges(field) {
         if (this.pos.x < -field.width || this.pos.x > field.width
             || this.pos.y < -field.height || this.pos.y > field.height) {
             return true;
@@ -28,7 +32,7 @@ function Laser(position, angle, initvel, lcolor) {
         }
     }
 
-    this.hit = function (ship) {
+    hit(ship) {
         if (dist(this.pos.x, this.pos.y, ship.pos.x, ship.pos.y) < ship.r) {
             return true;
         } else {
@@ -36,9 +40,8 @@ function Laser(position, angle, initvel, lcolor) {
         }
     }
 
-    this.isnuke = false;
 
-    this.chainreact = function() {
+    chainreact() {
         for (let i = 0; i < 8; i += random(1, 4)) {
             let position = this.pos.copy();
             let laser = new Laser(position, 0, createVector(0, 0), this.lasercolor);
@@ -48,9 +51,8 @@ function Laser(position, angle, initvel, lcolor) {
         }
     }
 
-    this.isbomb = false;
 
-    this.explode = function() {
+    explode() {
         for (let i = 0; i < 360; i += 20) {
             let position = this.pos.copy();
             let laser = new Laser(position, 0, createVector(0, 0), this.lasercolor);

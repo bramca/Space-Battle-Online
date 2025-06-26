@@ -7,8 +7,6 @@ var register = require("./routes/register.js");
 var menu = require("./routes/menu.js");
 var logout = require("./routes/logout.js");
 var game = require("./routes/game.js");
-const pug = require('pug');
-var fs = require("fs");
 var session = require('express-session')
 
 var app = express();

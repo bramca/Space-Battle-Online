@@ -18,7 +18,7 @@ for (let i = 0; i < poweruptypes.length; i++) {
 
 window.addEventListener("keydown", function (e) {
     // space en arrow keys
-    if ([32, 37, 38, 39, 40].indexOf(e.keyCode) > -1) {
+    if (["Space", "ArrowLeft", "ArrowUp", "ArrowRight", "ArrowDown"].indexOf(e.code) > -1) {
         e.preventDefault();
     }
 }, false);
@@ -86,7 +86,7 @@ function setup() {
             let index = data.removepowerups.pop();
             if (powerups[index]) {
                 delete powerupfreq[powerups[index].type][index];
-                delete powerups[index];                
+                delete powerups[index];
             }
         }
     });
@@ -124,7 +124,7 @@ function draw() {
     line(-field.width, field.height, field.width, field.height);
     line(field.width, field.height, field.width, -field.height);
     line(field.width, -field.height, -field.width, -field.height);
-    ship.render(c);
+    ship.render();
     ship.turn();
     ship.update(field);
     ship.thrust();
@@ -150,7 +150,7 @@ function draw() {
     }
 
     for (let key in otherplayers) {
-        otherplayers[key].render(c);
+        otherplayers[key].render();
         otherplayers[key].turn();
         otherplayers[key].update(field);
         otherplayers[key].thrust();
@@ -187,7 +187,7 @@ function draw() {
         //                 socket.emit('shoot', { velocity: 3, shootmod: shootmodus });
         //             }
         //         }
-                
+
         //     } else {
         //         otherplayers[key].setRotation(0);
         //         otherplayers[key].thrusting = false;
@@ -225,7 +225,7 @@ function draw() {
                     socket.emit('shoot', { velocity: 3, shootmod: ship.shootmodus });
                 }
             }
-            
+
         } else {
             ship.setRotation(0);
             ship.thrusting = false;

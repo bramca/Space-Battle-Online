@@ -1,24 +1,29 @@
-function Ship(color, pos, radius) {
-    this.pos = pos;
-    this.vel = createVector(0, 0);
-    this.r = radius;
-    this.angle = 0;
-    this.rotation = 0;
-    this.thrusting = false;
-    this.shipcolor = color;
-    this.life = 1;
-    this.shield = 0;
-    this.bot = false;
-    this.shootmodus = 1;
-    this.thrustspeed = 0.1;
-    this.poweruptimer = 0;
-    this.poweruptimerbool = false;
+class Ship {
+    constructor(color, pos, radius) {
+        this.pos = pos;
+        this.vel = createVector(0, 0);
+        this.r = radius;
+        this.angle = 0;
+        this.rotation = 0;
+        this.thrusting = false;
+        this.shipcolor = color;
+        this.life = 1;
+        this.shield = 0;
+        this.bot = false;
+        this.shootmodus = 1;
+        this.thrustspeed = 0.1;
+        this.poweruptimer = 0;
+        this.poweruptimerbool = false;
+        this.nukeCount = 0;
+        this.pulseCount = 0;
+        this.bombwallCount = 0;
+    }
 
-    this.setRotation = function (a) {
+    setRotation(a) {
         this.rotation = a;
     }
 
-    this.render = function (c) {
+    render() {
         push();
         // rotate(this.angle);
         // noFill();
@@ -26,27 +31,27 @@ function Ship(color, pos, radius) {
             noFill();
             stroke('rgba(64,224,208,' + this.shield + ')');
             strokeWeight(2);
-            arc(this.pos.x, this.pos.y, 3*this.r, 3*this.r, 0, TWO_PI);
+            arc(this.pos.x, this.pos.y, 3 * this.r, 3 * this.r, 0, TWO_PI);
             strokeWeight(1);
         }
         stroke(255);
         fill('red');
-        rect(this.pos.x-this.r, this.pos.y-2*this.r, 2*this.r, 5);
+        rect(this.pos.x - this.r, this.pos.y - 2 * this.r, 2 * this.r, 5);
         fill('green');
-        rect(this.pos.x-this.r, this.pos.y-2*this.r, this.life*2*this.r, 5);
+        rect(this.pos.x - this.r, this.pos.y - 2 * this.r, this.life * 2 * this.r, 5);
         stroke(this.shipcolor);
         fill(this.shipcolor);
         // triangle(this.pos.x-this.r, this.pos.y+this.r, this.pos.x-this.r, this.pos.y-this.r, this.pos.x+this.r, this.pos.y);
-        triangle(this.pos.x+this.r*Math.cos(this.angle), this.pos.y+this.r*Math.sin(this.angle), this.pos.x+this.r*Math.cos(this.angle+127.5*Math.PI/180), this.pos.y+this.r*Math.sin(this.angle+127.5*Math.PI/180), this.pos.x+this.r*Math.cos(this.angle-127.5*Math.PI/180), this.pos.y+this.r*Math.sin(this.angle-127.5*Math.PI/180));
+        triangle(this.pos.x + this.r * Math.cos(this.angle), this.pos.y + this.r * Math.sin(this.angle), this.pos.x + this.r * Math.cos(this.angle + 127.5 * Math.PI / 180), this.pos.y + this.r * Math.sin(this.angle + 127.5 * Math.PI / 180), this.pos.x + this.r * Math.cos(this.angle - 127.5 * Math.PI / 180), this.pos.y + this.r * Math.sin(this.angle - 127.5 * Math.PI / 180));
         pop();
     }
 
-    this.turn = function () {
+    turn() {
         // this.angle += this.rotation;
         this.angle = (this.angle + this.rotation) % (Math.PI * 2);
     }
 
-    this.update = function (field) {
+    update(field) {
         this.pos.add(this.vel);
         this.vel.mult(0.99);
 
@@ -75,13 +80,13 @@ function Ship(color, pos, radius) {
         }
     }
 
-    this.thrust = function () {
+    thrust() {
         if (this.thrusting) {
             this.vel.add(p5.Vector.fromAngle(this.angle).mult(this.thrustspeed));
         }
     }
 
-    this.shoot = function (velocity, shootmod) {
+    shoot(velocity, shootmod) {
         var lcolor = 'rgb(255,0,0)';
         if (shootmod === 1) {
             let position = this.pos.copy();
@@ -102,14 +107,13 @@ function Ship(color, pos, radius) {
             position1.add(p5.Vector.fromAngle(this.angle).mult(this.r));
             let position2 = this.pos.copy();
             position2.add(p5.Vector.fromAngle(this.angle).mult(this.r));
-            lasers.push(new Laser(position1, this.angle + PI/8, p5.Vector.fromAngle(this.angle).mult(this.vel.mag() + velocity), lcolor));
-            lasers.push(new Laser(position2, this.angle - PI/8, p5.Vector.fromAngle(this.angle).mult(this.vel.mag() + velocity), lcolor));
+            lasers.push(new Laser(position1, this.angle + PI / 8, p5.Vector.fromAngle(this.angle).mult(this.vel.mag() + velocity), lcolor));
+            lasers.push(new Laser(position2, this.angle - PI / 8, p5.Vector.fromAngle(this.angle).mult(this.vel.mag() + velocity), lcolor));
         }
     }
 
-    var pulseCount = 0;
 
-    this.pulse = function() {
+    pulse() {
         if (pulseCount < 2) {
             var pulsecolor = 'rgb(0,255,127)';
             pulseCount++;
@@ -122,9 +126,7 @@ function Ship(color, pos, radius) {
         }
     }
 
-    var bombwallCount = 0;
-
-    this.bombwall = function() {
+    bombwall() {
         if (bombwallCount < 1) {
             var bombcolor = 'rgb(255,0,255)';
             bombwallCount++;
@@ -143,9 +145,8 @@ function Ship(color, pos, radius) {
         }
     }
 
-    var nukeCount = 0;
 
-    this.nuke = function() {
+    nuke() {
         if (nukeCount < 3) {
             let nukecolor = 'rgb(255,178,102)';
             let position = this.pos.copy();
